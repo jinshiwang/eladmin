@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import me.zhengjie.modules.mnt.domain.App;
+import me.zhengjie.modules.system.domain.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -34,6 +36,8 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @NotNull(groups = Update.class)
     private Long id;
     @NotBlank
     private String name;
@@ -54,6 +58,9 @@ public class Student {
     private BigDecimal amount;
     @Column(name = "postgraduate_year")
     private Integer postgraduateYear;
+    /**
+     * 1:男；2：女
+     */
     @Column(name = "gender")
     private Integer gender;
     @Column(name = "status")
@@ -82,4 +89,7 @@ public class Student {
     public void copy(Student source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
+
+
+    public @interface Update {}
 }

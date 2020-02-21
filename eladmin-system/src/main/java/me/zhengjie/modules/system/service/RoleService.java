@@ -109,4 +109,9 @@ public interface RoleService {
      * @return 权限信息
      */
     Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
+
+    /**
+     * 获得该用户最高权限
+     */
+    RoleSmallDto getHighestRole(long userId);
 }

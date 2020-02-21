@@ -53,7 +53,6 @@ public class DictController {
     @Log("查询字典")
     @ApiOperation("查询字典")
     @GetMapping
-    @PreAuthorize("@el.check('dict:list')")
     public ResponseEntity<Object> getDicts(DictQueryCriteria resources, Pageable pageable){
         return new ResponseEntity<>(dictService.queryAll(resources,pageable),HttpStatus.OK);
     }

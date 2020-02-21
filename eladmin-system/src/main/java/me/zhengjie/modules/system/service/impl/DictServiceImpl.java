@@ -2,16 +2,16 @@ package me.zhengjie.modules.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import me.zhengjie.modules.system.domain.Dict;
+import me.zhengjie.modules.system.repository.DictRepository;
+import me.zhengjie.modules.system.service.DictService;
 import me.zhengjie.modules.system.service.dto.DictDetailDto;
+import me.zhengjie.modules.system.service.dto.DictDto;
 import me.zhengjie.modules.system.service.dto.DictQueryCriteria;
+import me.zhengjie.modules.system.service.mapper.DictMapper;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.modules.system.repository.DictRepository;
-import me.zhengjie.modules.system.service.DictService;
-import me.zhengjie.modules.system.service.dto.DictDto;
-import me.zhengjie.modules.system.service.mapper.DictMapper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -116,5 +116,16 @@ public class DictServiceImpl implements DictService {
             }
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public Dict queryByName(String name) {
+        Dict dict = dictRepository.findByName(name);
+        return dict;
+    }
+
+    @Override
+    public Dict queryByRemark(String remark) {
+        return null;
     }
 }

@@ -28,8 +28,8 @@ public class StudentQueryCriteriaDto {
     private List<Timestamp> createTime;
 
     @Query(type = Query.Type.EQUAL)
-    private Integer userId;
+    private Long userId;
 
     @Query(type = Query.Type.EQUAL)
-    private Integer schoolId;
+    private String schoolId;
 }

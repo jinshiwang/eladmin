@@ -2,13 +2,8 @@ package me.zhengjie.modules.haixue.service.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import me.zhengjie.modules.haixue.service.constant.StatusEnum;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -44,4 +39,18 @@ public class StudentDto {
     private String remark;
     private Date modifiedTime;
     private Timestamp gmtTime;
+    private String statusDesc;
+
+    public String getStatusDesc() {
+        StatusEnum statusEnum = StatusEnum.getByCode(status);
+        return statusEnum.getStatusDesc();
+    }
+
+    public String getDepartmentId() {
+        return departmentName;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
+    }
 }

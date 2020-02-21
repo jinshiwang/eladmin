@@ -179,4 +179,16 @@ public class RoleServiceImpl implements RoleService {
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    /**
+     * 获得该用户最高权限
+     *
+     * @param userId
+     */
+    @Override
+    public RoleSmallDto getHighestRole(long userId) {
+        List<RoleSmallDto> list =   findByUsersId(userId);
+        RoleSmallDto roleSmallDto =  list.stream().sorted(Comparator.comparing(RoleSmallDto::getLevel)).findFirst().get();
+        return roleSmallDto;
+    }
 }

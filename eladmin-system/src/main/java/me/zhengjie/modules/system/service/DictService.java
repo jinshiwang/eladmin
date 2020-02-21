@@ -64,4 +64,13 @@ public interface DictService {
      * @throws IOException /
      */
     void download(List<DictDto> queryAll, HttpServletResponse response) throws IOException;
+
+    /**
+     * 根据字典名字获得字典
+     * @param name
+     * @return
+     */
+    Dict queryByName(String name);
+
+    Dict queryByRemark(String remark);
 }

@@ -1,16 +1,16 @@
 package me.zhengjie.modules.haixue.rest;
 
-import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.haixue.domain.Student;
 import me.zhengjie.modules.haixue.service.StudentService;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
-import me.zhengjie.modules.mnt.domain.App;
-import me.zhengjie.modules.system.domain.User;
+import me.zhengjie.modules.system.domain.Dict;
+import me.zhengjie.modules.system.service.DictService;
+import me.zhengjie.modules.system.service.RoleService;
 import me.zhengjie.modules.system.service.UserService;
+import me.zhengjie.modules.system.service.dto.RoleSmallDto;
 import me.zhengjie.modules.system.service.dto.UserDto;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,10 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 描述:
@@ -49,6 +45,10 @@ public class StudentController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private DictService dictService;
 
     public StudentController(StudentService service){
         this.studentService = service;
@@ -57,6 +57,16 @@ public class StudentController {
     @ApiOperation(value = "查询应用")
     @GetMapping
     public ResponseEntity<Object> getStudents(StudentQueryCriteriaDto criteria, Pageable pageable){
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        RoleSmallDto roleSmallDto =  roleService.getHighestRole(user.getId());
+        String dataScope =  roleSmallDto.getDataScope();
+        if("本级".equalsIgnoreCase(dataScope)){
+            criteria.setUserId(user.getId());
+        }else if("本校".equalsIgnoreCase(dataScope)){
+           String name = user.getDept().getName();
+           Dict dict =  dictService.queryByRemark(name);
+           criteria.setSchoolId(dict.getName());
+        }
         return new ResponseEntity<>(studentService.queryAll(criteria,pageable), HttpStatus.OK);
     }
 

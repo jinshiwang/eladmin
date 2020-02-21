@@ -73,7 +73,7 @@ public class UserController {
     @ApiOperation("查询用户")
     @GetMapping
     @PreAuthorize("@el.check('user:list')")
-    public ResponseEntity<Object> getUsers(UserQueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<Object> getUsners(UserQueryCriteria criteria, Pageable pageable){
         Set<Long> deptSet = new HashSet<>();
         Set<Long> result = new HashSet<>();
         if (!ObjectUtils.isEmpty(criteria.getDeptId())) {
@@ -203,7 +203,7 @@ public class UserController {
         UserDto user = userService.findByName(SecurityUtils.getUsername());
         Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         Integer optLevel = roleService.findByRoles(resources.getRoles());
-        if (currentLevel > optLevel) {
+        if (currentLevel >optLevel) {
             throw new BadRequestException("角色权限不足");
         }
     }

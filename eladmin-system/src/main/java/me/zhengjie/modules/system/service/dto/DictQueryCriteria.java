@@ -12,4 +12,7 @@ public class DictQueryCriteria {
 
     @Query(blurry = "name,remark")
     private String blurry;
+
+    @Query(type = Query.Type.EQUAL)
+    private String name;
 }

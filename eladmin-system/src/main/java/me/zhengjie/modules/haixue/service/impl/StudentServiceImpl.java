@@ -6,10 +6,13 @@ import me.zhengjie.modules.haixue.service.StudentService;
 import me.zhengjie.modules.haixue.service.dto.StudentDto;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
 import me.zhengjie.modules.haixue.service.mapper.StudentMapper;
-import me.zhengjie.modules.mnt.domain.App;
+import me.zhengjie.modules.system.domain.Dict;
+import me.zhengjie.modules.system.domain.DictDetail;
+import me.zhengjie.modules.system.service.DictService;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     private StudentMapper studentMapper;
+    @Autowired
+    private  DictService dictService;
 
     public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
@@ -72,6 +77,10 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public StudentDto create(Student stu) {
+        Dict dict =  dictService.queryByName(stu.getSchoolId());
+        if(dict!=null){
+            stu.setSchoolName(dict.getRemark());
+        }
         return studentMapper.toDto(studentRepository.save(stu));
     }
 
@@ -82,6 +91,13 @@ public class StudentServiceImpl implements StudentService {
      */
     @Override
     public void update(Student resources) {
+        Dict dict =  dictService.queryByName(resources.getSchoolId());
+        if(dict!=null){
+            resources.setSchoolName(dict.getRemark());
+            String departMentId =  resources.getDepartmentId();
+            DictDetail dictDetail =   dict.getDictDetails().stream().filter(e->e.getValue().equalsIgnoreCase(departMentId)).findFirst().get();
+            resources.setDepartmentName(dictDetail.getLabel());
+        }
         Student app = studentRepository.findById(resources.getId()).orElseGet(Student::new);ValidationUtil.isNull(app.getId(),"App","id",resources.getId());
         app.copy(resources);
         studentRepository.save(app);
