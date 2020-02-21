@@ -25,11 +25,17 @@ public class StudentQueryCriteriaDto {
     private String name;
 
     @Query(type = Query.Type.BETWEEN)
-    private List<Timestamp> createTime;
+    private List<Timestamp> gmtTime;
 
     @Query(type = Query.Type.EQUAL)
     private Long userId;
 
     @Query(type = Query.Type.EQUAL)
     private String schoolId;
+    @Query(type = Query.Type.INNER_LIKE)
+    private String phone;
+    @Query(type = Query.Type.EQUAL)
+    private String departmentId;
+    @Query(type = Query.Type.EQUAL)
+    private Integer status;
 }

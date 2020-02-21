@@ -46,10 +46,6 @@ public class StudentDto {
         return statusEnum.getStatusDesc();
     }
 
-    public String getDepartmentId() {
-        return departmentName;
-    }
-
     public void setStatusDesc(String statusDesc) {
         this.statusDesc = statusDesc;
     }
