@@ -1,6 +1,7 @@
 package me.zhengjie.modules.haixue.service;
 
 import me.zhengjie.modules.haixue.domain.Student;
+import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
 import me.zhengjie.modules.haixue.service.dto.StudentDto;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
 import me.zhengjie.modules.mnt.domain.App;
@@ -54,4 +55,5 @@ public interface StudentService {
 
     void delete(Set<Long> ids);
 
+    StudentChartVo chart();
 }

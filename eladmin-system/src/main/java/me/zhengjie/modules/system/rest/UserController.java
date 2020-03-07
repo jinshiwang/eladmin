@@ -110,7 +110,11 @@ public class UserController {
     public ResponseEntity<Object> create(@Validated @RequestBody User resources){
         checkLevel(resources);
         // 默认密码 123456
-        resources.setPassword(passwordEncoder.encode("123456"));
+        if(StringUtils.isEmpty(resources.getPassword())){
+            resources.setPassword(passwordEncoder.encode("123456"));
+        }else {
+            resources.setPassword(passwordEncoder.encode(resources.getPassword()));
+        }
         return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
     }
 
@@ -120,6 +124,9 @@ public class UserController {
     @PreAuthorize("@el.check('user:edit')")
     public ResponseEntity<Object> update(@Validated(User.Update.class) @RequestBody User resources){
         checkLevel(resources);
+        if(StringUtils.isNotEmpty(resources.getPassword())){
+            resources.setPassword(passwordEncoder.encode(resources.getPassword()));
+        }
         userService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

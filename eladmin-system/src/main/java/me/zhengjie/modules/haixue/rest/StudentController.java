@@ -1,9 +1,14 @@
 package me.zhengjie.modules.haixue.rest;
 
+import cn.hutool.core.date.DateTime;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Range;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.haixue.domain.Student;
+import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
 import me.zhengjie.modules.haixue.service.StudentService;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
 import me.zhengjie.modules.system.domain.Dict;
@@ -27,7 +32,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
  * 描述:
@@ -99,6 +106,14 @@ public class StudentController {
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         studentService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Log("报表数据")
+    @GetMapping(value = "/chart")
+    @AnonymousAccess
+    public ResponseEntity<StudentChartVo> chart(){
+        StudentChartVo  studentChartVo = studentService.chart();
+        return new ResponseEntity<>(studentChartVo,HttpStatus.OK);
     }
 
 }

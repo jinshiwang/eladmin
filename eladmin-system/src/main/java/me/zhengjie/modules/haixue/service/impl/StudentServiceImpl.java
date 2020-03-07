@@ -1,6 +1,9 @@
 package me.zhengjie.modules.haixue.service.impl;
 
+import cn.hutool.core.date.DateTime;
+import com.google.common.collect.Lists;
 import me.zhengjie.modules.haixue.domain.Student;
+import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
 import me.zhengjie.modules.haixue.repository.StudentRepository;
 import me.zhengjie.modules.haixue.service.StudentService;
 import me.zhengjie.modules.haixue.service.dto.StudentDto;
@@ -19,7 +22,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * 描述:
@@ -108,5 +116,17 @@ public class StudentServiceImpl implements StudentService {
         for (Long id : ids) {
             studentRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public StudentChartVo chart() {
+        DateTime dateTime = DateTime.now();
+        //2019年至今的统计
+        int[]  years = IntStream.rangeClosed(2019,dateTime.year()).toArray();
+        StudentChartVo studentChartVo = new StudentChartVo();
+        studentChartVo.setTotal(studentRepository.getTotal().stream().map(student -> student.getTotal()).collect(Collectors.toList()));
+        studentChartVo.setAmount(studentRepository.getAmount().stream().map(student -> student.getAmount().divide(new BigDecimal(10000))).collect(Collectors.toList()));
+        studentChartVo.setXAxis(years);
+        return studentChartVo;
     }
 }

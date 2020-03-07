@@ -85,6 +85,10 @@ public class Student {
     @Column(name = "gmt_time")
     @CreationTimestamp
     private Timestamp gmtTime;
+    /**
+     * 学生总数
+     */
+    private Integer total;
 
     public void copy(Student source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

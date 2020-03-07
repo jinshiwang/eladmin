@@ -38,4 +38,6 @@ public class StudentQueryCriteriaDto {
     private String departmentId;
     @Query(type = Query.Type.EQUAL)
     private Integer status;
+
+
 }

@@ -123,6 +123,9 @@ public class UserServiceImpl implements UserService {
         user.setPhone(resources.getPhone());
         user.setNickName(resources.getNickName());
         user.setSex(resources.getSex());
+        if(StringUtils.isNotEmpty(resources.getPassword())){
+            user.setPassword(resources.getPassword());
+        }
         userRepository.save(user);
     }
 
