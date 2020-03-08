@@ -129,6 +129,7 @@ public class StudentServiceImpl implements StudentService {
         studentChartVo.setTotal(groups.stream().map(student -> student.getTotal()).collect(Collectors.toList()));
         studentChartVo.setAmount(groups.stream().map(student -> student.getAmount().divide(new BigDecimal(10000))).collect(Collectors.toList()));
         studentChartVo.setXAxis(years);
+        Collections.reverse(groups);
         studentChartVo.setGroups(groups);
         return studentChartVo;
     }
