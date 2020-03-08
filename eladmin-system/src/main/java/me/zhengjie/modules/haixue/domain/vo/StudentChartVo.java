@@ -2,6 +2,7 @@ package me.zhengjie.modules.haixue.domain.vo;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.zhengjie.modules.haixue.domain.StudentGroupby;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,5 +21,5 @@ public class StudentChartVo {
     private int[] xAxis;
     private List<Integer> total;
     private  List<BigDecimal> amount;
-
+    private List<StudentGroupby> groups;
 }

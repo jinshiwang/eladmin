@@ -17,9 +17,7 @@ import java.util.List;
  */
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 
-    @Query(value="select count(1) as total,postgraduate_year as pyear from student group by postgraduate_year order by postgraduate_year",nativeQuery=true)
-     List<StudentGroupby> getTotal();
+    @Query(value="select count(1) as total,postgraduate_year as pyear,sum(amount) as amount from student group by postgraduate_year order by postgraduate_year",nativeQuery=true)
+     List<StudentGroupby> getTotalAmount();
 
-    @Query(value="select sum(amount) as amount,postgraduate_year as pyear from student group by postgraduate_year order by postgraduate_year",nativeQuery=true)
-     List<StudentGroupby> getAmount();
 }
