@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.haixue.domain.Student;
+import me.zhengjie.modules.haixue.domain.vo.StudentChartTableVo;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
 import me.zhengjie.modules.haixue.service.StudentService;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -95,6 +97,7 @@ public class StudentController {
     public ResponseEntity<Object> update(@Validated @RequestBody Student resources){
         UserDto user = userService.findByName(SecurityUtils.getUsername());
         resources.setUserId(user.getId());
+        resources.setModifiedTime(new Date());
         studentService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -108,12 +111,20 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Log("报表数据")
+    @Log("柱状图报表数据")
     @GetMapping(value = "/chart")
     @AnonymousAccess
     public ResponseEntity<StudentChartVo> chart(){
         StudentChartVo  studentChartVo = studentService.chart();
         return new ResponseEntity<>(studentChartVo,HttpStatus.OK);
+    }
+
+    @Log("柱状图报表数据")
+    @GetMapping(value = "/charttable")
+    @AnonymousAccess
+    public ResponseEntity<List<StudentChartTableVo>> charttable(){
+        List<StudentChartTableVo> list = studentService.charttable();
+        return new ResponseEntity<List<StudentChartTableVo>>(list,HttpStatus.OK);
     }
 
 }

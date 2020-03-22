@@ -1,6 +1,7 @@
 package me.zhengjie.modules.haixue.service;
 
 import me.zhengjie.modules.haixue.domain.Student;
+import me.zhengjie.modules.haixue.domain.vo.StudentChartTableVo;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
 import me.zhengjie.modules.haixue.service.dto.StudentDto;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -56,4 +58,6 @@ public interface StudentService {
     void delete(Set<Long> ids);
 
     StudentChartVo chart();
+
+    List<StudentChartTableVo> charttable();
 }

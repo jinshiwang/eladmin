@@ -20,4 +20,6 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
     @Query(value="select count(1) as total,postgraduate_year as pyear,sum(amount) as amount from student group by postgraduate_year order by postgraduate_year",nativeQuery=true)
      List<StudentGroupby> getTotalAmount();
 
+    @Query(value="select count(1) as nums,postgraduate_year as pyear,school_name as schoolName,status,sum(amount) as amount from student group by postgraduate_year,school_name,status order by postgraduate_year",nativeQuery=true)
+    List<StudentGroupby> group();
 }

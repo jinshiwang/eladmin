@@ -4,9 +4,11 @@ import cn.hutool.core.date.DateTime;
 import com.google.common.collect.Lists;
 import me.zhengjie.modules.haixue.domain.Student;
 import me.zhengjie.modules.haixue.domain.StudentGroupby;
+import me.zhengjie.modules.haixue.domain.vo.StudentChartTableVo;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
 import me.zhengjie.modules.haixue.repository.StudentRepository;
 import me.zhengjie.modules.haixue.service.StudentService;
+import me.zhengjie.modules.haixue.service.constant.StatusEnum;
 import me.zhengjie.modules.haixue.service.dto.StudentDto;
 import me.zhengjie.modules.haixue.service.dto.StudentQueryCriteriaDto;
 import me.zhengjie.modules.haixue.service.mapper.StudentMapper;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -132,5 +135,40 @@ public class StudentServiceImpl implements StudentService {
         Collections.reverse(groups);
         studentChartVo.setGroups(groups);
         return studentChartVo;
+    }
+
+    @Override
+    public List<StudentChartTableVo> charttable() {
+        List<StudentChartTableVo> list = Lists.newArrayList();
+        List<StudentGroupby> groups =  studentRepository.group();
+        Map<Integer,List<StudentGroupby>> map =  groups.stream().collect(Collectors.groupingBy(StudentGroupby::getPyear));
+        map.forEach((k,v)->{
+            List<StudentGroupby> groupByYear =  map.get(k);
+            Map<String,List<StudentGroupby>> groupBySchoolName =  groupByYear.stream().collect(Collectors.groupingBy(StudentGroupby::getSchoolName));
+
+            groupBySchoolName.forEach((k1,v1)->{
+                StudentChartTableVo studentChartTableVo = new StudentChartTableVo();
+                studentChartTableVo.setYear(k);
+                studentChartTableVo.setSchoolName(k1);
+                BigDecimal amout = new BigDecimal(0);
+                for(StudentGroupby stu:v1){
+                    amout =  amout.add(stu.getAmount());
+                    if(StatusEnum.INIT.getStatus()==stu.getStatus()){
+                        studentChartTableVo.setInitNums(stu.getNums());
+                    }else if(StatusEnum.INTENTION.getStatus()==stu.getStatus()){
+                        studentChartTableVo.setIntentionNums(stu.getNums());
+                    }else if(StatusEnum.PRESIGNUP.getStatus()==stu.getStatus()){
+                        studentChartTableVo.setPresignupNums(stu.getNums());
+                    }else if(StatusEnum.SUBSCRIPTION.getStatus()==stu.getStatus()){
+                        studentChartTableVo.setSubscriptionNums(stu.getNums());
+                    }else if(StatusEnum.FULLPAYMENT.getStatus()==stu.getStatus()){
+                        studentChartTableVo.setFullpaymentNums(stu.getNums());
+                    }
+                }
+                studentChartTableVo.setTotalAmount(amout.doubleValue());
+                list.add(studentChartTableVo);
+            });
+        });
+        return list;
     }
 }

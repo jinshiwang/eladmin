@@ -19,4 +19,10 @@ public interface StudentGroupby {
      Integer getPyear();
 
      BigDecimal getAmount();
+
+     Integer getNums();
+
+     String getSchoolName();
+
+     Integer getStatus();
 }
