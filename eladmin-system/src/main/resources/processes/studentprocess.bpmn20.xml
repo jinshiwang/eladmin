@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="studentapp" name="studentprocess" isExecutable="true">
+    <userTask id="studentTask" name="学生缴费" flowable:candidateGroups="financeTaskList" flowable:formFieldValidation="true"></userTask>
+    <startEvent id="startEvent" name="开始" flowable:formFieldValidation="true"></startEvent>
+    <sequenceFlow id="sid-16C2F261-4F8D-4417-A955-82E29F9BC2B3" sourceRef="startEvent" targetRef="studentTask"></sequenceFlow>
+    <endEvent id="end" name="结束"></endEvent>
+    <userTask id="sid-E8C0CD46-FF50-431B-B063-6EDDF3BE0756" name="财务审批" flowable:candidateGroups="managerTaskList" flowable:formFieldValidation="true"></userTask>
+    <userTask id="sid-14F7CA45-184C-4AE7-96FA-753D3D11EB49" name="教务端服务" flowable:formFieldValidation="true"></userTask>
+    <sequenceFlow id="sid-CB774A72-0F58-455F-9BF7-863C3C9A3986" sourceRef="studentTask" targetRef="sid-E8C0CD46-FF50-431B-B063-6EDDF3BE0756"></sequenceFlow>
+    <sequenceFlow id="sid-9FF3C422-313C-4D93-846C-07426B9D1711" name="驳回" sourceRef="sid-E8C0CD46-FF50-431B-B063-6EDDF3BE0756" targetRef="studentTask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='驳回'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-547A5AFF-E3F4-4913-A76F-C8D31F656781" name="通过" sourceRef="sid-14F7CA45-184C-4AE7-96FA-753D3D11EB49" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-17DB7AA9-D5F6-4BFC-8A0B-67F1C44FAE49" name="通过" sourceRef="sid-E8C0CD46-FF50-431B-B063-6EDDF3BE0756" targetRef="sid-14F7CA45-184C-4AE7-96FA-753D3D11EB49">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${outcome=='通过'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_studentapp">
+    <bpmndi:BPMNPlane bpmnElement="studentapp" id="BPMNPlane_studentapp">
+      <bpmndi:BPMNShape bpmnElement="studentTask" id="BPMNShape_studentTask">
+        <omgdc:Bounds height="80.0" width="100.0" x="150.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="30.0" width="30.0" x="105.0" y="195.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="780.0" y="176.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-E8C0CD46-FF50-431B-B063-6EDDF3BE0756" id="BPMNShape_sid-E8C0CD46-FF50-431B-B063-6EDDF3BE0756">
+        <omgdc:Bounds height="80.0" width="100.0" x="360.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-14F7CA45-184C-4AE7-96FA-753D3D11EB49" id="BPMNShape_sid-14F7CA45-184C-4AE7-96FA-753D3D11EB49">
+        <omgdc:Bounds height="80.0" width="100.0" x="570.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-CB774A72-0F58-455F-9BF7-863C3C9A3986" id="BPMNEdge_sid-CB774A72-0F58-455F-9BF7-863C3C9A3986">
+        <omgdi:waypoint x="249.95000000000002" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="335.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="335.0" y="190.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="190.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-16C2F261-4F8D-4417-A955-82E29F9BC2B3" id="BPMNEdge_sid-16C2F261-4F8D-4417-A955-82E29F9BC2B3">
+        <omgdi:waypoint x="120.0" y="195.0"></omgdi:waypoint>
+        <omgdi:waypoint x="120.0" y="130.0"></omgdi:waypoint>
+        <omgdi:waypoint x="149.9999999999813" y="130.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-9FF3C422-313C-4D93-846C-07426B9D1711" id="BPMNEdge_sid-9FF3C422-313C-4D93-846C-07426B9D1711">
+        <omgdi:waypoint x="359.99999999999875" y="228.36170212765958"></omgdi:waypoint>
+        <omgdi:waypoint x="175.0" y="226.0"></omgdi:waypoint>
+        <omgdi:waypoint x="175.0" y="169.95"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-17DB7AA9-D5F6-4BFC-8A0B-67F1C44FAE49" id="BPMNEdge_sid-17DB7AA9-D5F6-4BFC-8A0B-67F1C44FAE49">
+        <omgdi:waypoint x="459.94999999995036" y="190.0"></omgdi:waypoint>
+        <omgdi:waypoint x="569.999999999997" y="190.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-547A5AFF-E3F4-4913-A76F-C8D31F656781" id="BPMNEdge_sid-547A5AFF-E3F4-4913-A76F-C8D31F656781">
+        <omgdi:waypoint x="669.9499999999999" y="190.0"></omgdi:waypoint>
+        <omgdi:waypoint x="780.0" y="190.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -40,7 +40,7 @@ public class StudentDto {
     private Date modifiedTime;
     private Timestamp gmtTime;
     private String statusDesc;
-
+    private boolean processFlag;
     public String getStatusDesc() {
         StatusEnum statusEnum = StatusEnum.getByCode(status);
         return statusEnum.getStatusDesc();

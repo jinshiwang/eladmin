@@ -2,10 +2,12 @@ package me.zhengjie.modules.haixue.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import com.google.common.collect.Lists;
+import me.zhengjie.modules.haixue.domain.ProcessRecord;
 import me.zhengjie.modules.haixue.domain.Student;
 import me.zhengjie.modules.haixue.domain.StudentGroupby;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartTableVo;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
+import me.zhengjie.modules.haixue.repository.ProcessRecordRepository;
 import me.zhengjie.modules.haixue.repository.StudentRepository;
 import me.zhengjie.modules.haixue.service.StudentService;
 import me.zhengjie.modules.haixue.service.constant.StatusEnum;
@@ -47,12 +49,16 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
 
     private StudentMapper studentMapper;
+
+    private ProcessRecordRepository processRecordRepository;
+
     @Autowired
     private  DictService dictService;
 
-    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
+    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper,ProcessRecordRepository processRecordRepository) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
+        this.processRecordRepository = processRecordRepository;
     }
 
     /**
@@ -65,7 +71,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Object queryAll(StudentQueryCriteriaDto criteria, Pageable pageable) {
         Page<Student> page = studentRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(studentMapper::toDto));
+        Page<StudentDto> pageDtos =  page.map(studentMapper::toDto);
+        //判断是否启动了流程，如果启动，设置为true
+        for(StudentDto studentDto : pageDtos.getContent()){
+            ProcessRecord processRecord =   processRecordRepository.selectByStudentId(studentDto.getId());
+            if(processRecord!=null){
+                studentDto.setProcessFlag(true);
+            }
+
+        }
+        return PageUtil.toPage(pageDtos);
     }
 
     /**
