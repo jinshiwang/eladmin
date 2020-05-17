@@ -57,7 +57,7 @@ public interface StudentService {
 
     void delete(Set<Long> ids);
 
-    StudentChartVo chart();
+    StudentChartVo chart(StudentQueryCriteriaDto criteria);
 
-    List<StudentChartTableVo> charttable();
+    List<StudentChartTableVo> charttable(StudentQueryCriteriaDto criteria);
 }

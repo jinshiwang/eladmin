@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -39,6 +40,12 @@ public class ProcessRecord {
     private Long  studentId;
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "finance_id")
+    private Long financeId;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
     /**
      * 1:使用中；2：结束
      */

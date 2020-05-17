@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.zhengjie.annotation.AnonymousAccess;
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.modules.haixue.domain.DataScopeEnum;
 import me.zhengjie.modules.haixue.domain.Student;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartTableVo;
 import me.zhengjie.modules.haixue.domain.vo.StudentChartVo;
@@ -69,9 +70,9 @@ public class StudentController {
         UserDto user = userService.findByName(SecurityUtils.getUsername());
         RoleSmallDto roleSmallDto =  roleService.getHighestRole(user.getId());
         String dataScope =  roleSmallDto.getDataScope();
-        if("本级".equalsIgnoreCase(dataScope)){
+        if(DataScopeEnum.SELF.getDesc().equalsIgnoreCase(dataScope)){
             criteria.setUserId(user.getId());
-        }else if("本校".equalsIgnoreCase(dataScope)){
+        }else if(DataScopeEnum.SCHOOL_ADMIN.getDesc().equalsIgnoreCase(dataScope)){
            String name = user.getDept().getName();
            Dict dict =  dictService.queryByRemark(name);
            criteria.setSchoolId(dict.getName());
@@ -115,7 +116,18 @@ public class StudentController {
     @GetMapping(value = "/chart")
     @AnonymousAccess
     public ResponseEntity<StudentChartVo> chart(){
-        StudentChartVo  studentChartVo = studentService.chart();
+        StudentQueryCriteriaDto criteria = new StudentQueryCriteriaDto();
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        RoleSmallDto roleSmallDto =  roleService.getHighestRole(user.getId());
+        String dataScope =  roleSmallDto.getDataScope();
+        if(DataScopeEnum.SELF.getDesc().equalsIgnoreCase(dataScope)){
+            criteria.setUserId(user.getId());
+        }else if(DataScopeEnum.SCHOOL_ADMIN.getDesc().equalsIgnoreCase(dataScope)){
+            String name = user.getDept().getName();
+            Dict dict =  dictService.queryByRemark(name);
+            criteria.setSchoolId(dict.getName());
+        }
+        StudentChartVo  studentChartVo = studentService.chart(criteria);
         return new ResponseEntity<>(studentChartVo,HttpStatus.OK);
     }
 
@@ -123,7 +135,18 @@ public class StudentController {
     @GetMapping(value = "/charttable")
     @AnonymousAccess
     public ResponseEntity<List<StudentChartTableVo>> charttable(){
-        List<StudentChartTableVo> list = studentService.charttable();
+        StudentQueryCriteriaDto criteria = new StudentQueryCriteriaDto();
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        RoleSmallDto roleSmallDto =  roleService.getHighestRole(user.getId());
+        String dataScope =  roleSmallDto.getDataScope();
+        if(DataScopeEnum.SELF.getDesc().equalsIgnoreCase(dataScope)){
+            criteria.setUserId(user.getId());
+        }else if(DataScopeEnum.SCHOOL_ADMIN.getDesc().equalsIgnoreCase(dataScope)){
+            String name = user.getDept().getName();
+            Dict dict =  dictService.queryByRemark(name);
+            criteria.setSchoolId(dict.getName());
+        }
+        List<StudentChartTableVo> list = studentService.charttable(criteria);
         return new ResponseEntity<List<StudentChartTableVo>>(list,HttpStatus.OK);
     }
 

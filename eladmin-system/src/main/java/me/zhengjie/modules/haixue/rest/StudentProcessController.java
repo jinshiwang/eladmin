@@ -72,6 +72,7 @@ public class StudentProcessController {
         processRecord.setStatus(ProcessStatusEnum.INIT.getStatus());
         Student student =  studentRepository.findById(studentId).get();
         processRecord.setContent(JSONObject.toJSONString(student));
+        processRecord.setAmount(student.getAmount());
         processRecordRepository.save(processRecord);
         return new ResponseEntity("该学生当前存在财务审核流程：" + processRecord.getId(),HttpStatus.OK);
     }
@@ -167,7 +168,7 @@ public class StudentProcessController {
         }
         processRecord.setCurrentTaskId(taskId);
         Long userId =  UserHolderUtils.getUserId();
-        processRecord.setUserId(userId);
+        processRecord.setFinanceId(userId);
         processRecordRepository.save(processRecord);
         return "processed ok!";
     }
@@ -196,7 +197,7 @@ public class StudentProcessController {
         taskService.complete(taskId, map);
         ProcessRecord processRecord =  processRecordRepository.selectByProcessId(task.getProcessInstanceId());
         Long userId =  UserHolderUtils.getUserId();
-        processRecord.setUserId(userId);
+        processRecord.setFinanceId(userId);
         processRecord.setStatus(ProcessStatusEnum.FINANCE_REJECT.getStatus());
         processRecord.setCurrentTaskId(taskId);
         processRecordRepository.save(processRecord);

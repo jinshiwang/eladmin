@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 
 public enum  ProcessStatusEnum {
-    INIT(1),FINANCE_PASS(2),FINANCE_REJECT(3),FIN(4)
+    INIT(1),FINANCE_REJECT(2),FINANCE_PASS(3),FIN(4)
     ;
 
     private Integer status;
